@@ -41,7 +41,7 @@ killCount = 0
 lastMedkit = [20, True]
 medkitCooldown = 15
 medkitPos = p.Vector2()
-medkitRadius = 10
+medkitRadius = 20
 
 class bullet:
     def __init__(self, position, angle):
@@ -110,15 +110,15 @@ while running:
         side = r.choice(["left", "right", "top", "bottom"])
         if side == "left":
             random_x = 0
-            random_y = r.randint(0, screen.get_height())
+            random_y = r.randint(medkitRadius, screen.get_height()-medkitRadius)
         elif side == "right":
             random_x = screen.get_width()
-            random_y = r.randint(0, screen.get_height())
+            random_y = r.randint(medkitRadius, screen.get_height()-medkitRadius)
         elif side == "top":
-            random_x = r.randint(0, screen.get_width())
+            random_x = r.randint(medkitRadius, screen.get_width()-medkitRadius)
             random_y = 0
         elif side == "bottom":
-            random_x = r.randint(0, screen.get_width())
+            random_x = r.randint(medkitRadius, screen.get_width()-medkitRadius)
             random_y = screen.get_height()
         angle = -m.atan2(playerPos.y - random_y, playerPos.x - random_x)
         enemies.append(enemy((random_x, random_y), -angle))
@@ -234,10 +234,12 @@ while running:
     for i in enemies:
         p.draw.circle(screen, "blue", (int(i.position.x), int(i.position.y)), i.radius)
         p.draw.rect(screen, "red", (int(i.position.x)-i.radius*2/3, int(i.position.y)-i.radius, 4/3*i.radius*i.health/100, 1/4*i.radius))
-        p.draw.rect(screen, "grey", (int(i.position.x)-i.radius*2/3, int(i.position.y)-i.radius, 4/3*i.radius, 1/4*i.radius), 2)
+        p.draw.rect(screen, "grey", (int(i.position.x)-i.radius*2/3, int(i.position.y)-i.radius, 4/3*i.radius, 1/4*i.radius), 1)
     # medkit
     if lastMedkit[1] is False:
-        p.draw.circle(screen, "green", medkitPos, medkitRadius)
+        p.draw.circle(screen, "darkgreen", medkitPos, medkitRadius, 3)
+        p.draw.rect(screen, "green", (medkitPos.x-medkitRadius/4, medkitPos.y-medkitRadius/2, medkitRadius/2, medkitRadius))
+        p.draw.rect(screen, "green", (medkitPos.x-medkitRadius/2, medkitPos.y-medkitRadius/4, medkitRadius, medkitRadius/2))
     # player health bar
     p.draw.rect(screen, "green", (20, 20, 100*playerHealth/100, 20))
     p.draw.rect(screen, "grey", (20, 20, 100, 20), 2)
